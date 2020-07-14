@@ -32,11 +32,12 @@ TODO:
 
 - Animation for different display modes
 
-- Keboard shortcuts for number of partials, change of shape to draw,
+- Keyboard shortcuts for number of partials, change of shape to draw,
   speed, etc.
   
-- freq labeling of circles
+- Labeling of circles with freq index.
 
 - Maybe changing to cl-sdl2 and doing the animation in 3D using opengl
-  (with time as 3rd axis). This would be very helpful for teaching
-  properties of dsp processing (using waveforms).
+  (with time as 3rd axis). This could be very helpful for teaching
+  properties of dsp processing (using waveforms rather than 2D
+  shapes).
