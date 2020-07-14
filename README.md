@@ -25,7 +25,7 @@ shapes can be added by extracting the points from an svg file (the
 parser and the fft analysis code is contained, although not thoroughly
 documented).
 
-The advantage of this code is that is is interactive so zooming and
+The advantage of this code is that being interactive zooming and
 animations for different display modes could easily get implemented.
 
 TODO:
