@@ -38,8 +38,9 @@
 (defparameter *max-path-length* 512)
 (defparameter *curr-shape* *violinschluessel-512*)
 
-
 (defun paint ()
+  "paint *path-size* elements of *cyclic-path* as lines, starting at
+*curr-path-idx*. Reduce opacity with incrementing index."
   (loop
     for idx below (- *path-size* 2)
     with offs = *curr-path-idx*

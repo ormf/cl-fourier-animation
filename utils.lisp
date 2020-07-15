@@ -36,6 +36,18 @@
       (complex (float (elt vec 0) 1.0d0)
                (float (elt vec 1) 1.0d0))))
 
+(defun power-of-two? (num)
+  (zerop (logand num (- num 1))))
+
+(defun round-pt (pt)
+  (vector (round (elt pt 0))
+          (round (elt pt 1))))
+
+(defun dround (num &optional (prec 2))
+  "round to a given precision (default 2 digits after the point)."
+  (let ((ept (expt 10 prec)))
+    (/ (round (* num ept)) ept 1.0)))
+
 (defun make-path (&rest coords)
   (loop for (x y) on coords by #'cddr while y collect (complex x y)))
 
@@ -53,12 +65,11 @@ two's complement for a range given by size.
          (max (ash 1 (1+ power-of-two))))
     (lambda (x) (if (> x split-point) (- x max) x))))
 
-(defun round-pt (pt)
-  (vector (round (elt pt 0))
-          (round (elt pt 1))))
+
 
 (defun scale-rotate (path cx offset &key round)
-  "rotate, scale and offset a seq of 2D points. the seq is a list of complex numbers"
+  "rotate, scale and offset a path of 2D points. The path is a seq of
+complex numbers. The result is returned as a list."
 ;;;  (break "scale-rotate: ~a" path)
   (map 'list (lambda (pt)
                (let ((res (+ offset (* pt cx))))
@@ -68,13 +79,3 @@ two's complement for a range given by size.
                      (vector (realpart res)
                              (imagpart res)))))
        path))
-
-
-;;; cyclic path for showing the current paint procedure with a fading line.
-
-(defun power-of-two? (num)
-  (zerop (logand num (- num 1))))
-
-;;; (defun )
-
-
