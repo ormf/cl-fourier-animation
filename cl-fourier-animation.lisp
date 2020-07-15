@@ -30,12 +30,14 @@
 (defparameter *max-num* 30)
 (defparameter *angle-increment* -0.005)
 (defparameter *shift* (floor (/ *max-num* -2)))
-(defparameter *fft-size* 512)
 
-(defparameter *cyclic-path* (make-array 2048 :element-type 'vector :initial-contents (loop for i below 2048 collect (vector 0 0))))
+(defparameter *cyclic-path* (make-array 2048 :element-type 'vector
+                                             :initial-contents (loop for i below 2048 collect (vector 0 0))))
 (defparameter *path-size* 0)
 (defparameter *curr-path-idx* 1)
 (defparameter *max-path-length* 512)
+(defparameter *curr-shape* *violinschluessel-512*)
+
 
 (defun paint ()
   (loop
@@ -49,29 +51,22 @@
         :color (sdl:color :r (round (* opacity 1.0)) :g (round (* opacity 1.0)) :b (round (* opacity 0.0)))
         :aa t)))
 
-(defun draw-shape ()
-  (loop
-    for (pt1 pt2) on (scale-rotate *achtel-512* (complex 1500 0) (complex 2050 -750)
-                                   :round t)
-        with opacity = 80
-        while pt2
-        do (sdl:draw-line
-            pt1 pt2
-            :color (sdl:color :r (round opacity) :g (round opacity) :b (round opacity))
-            :aa t)))
-#|
+(defun set-shape (shape)
+  (setf *path-size* 0)
+  (setf *curr-shape* shape)
+  (setf *angle* 0)
+  nil)
 
 (defun draw-shape ()
-  (loop
-    for (pt1 pt2) on (scale-rotate *hessen-512* (complex 800 0) (complex 1400 00)
-                                   :round t)
-        with opacity = 80
-        while pt2
-        do (sdl:draw-line
-            pt1 pt2
-            :color (sdl:color :r (round opacity) :g (round opacity) :b (round opacity))
-            :aa t)))
-|#
+  (with-slots (coords scale offset) *curr-shape*
+    (loop
+      for (pt1 pt2) on (scale-rotate coords scale offset :round t)
+      with opacity = 50
+      while pt2
+      do (sdl:draw-line
+          pt1 pt2
+          :color (sdl:color :r (round opacity) :g (round opacity) :b (round opacity))
+          :aa t))))
 
 (declaim (inline draw-circled-arrow))
 (defun draw-circled-arrow (cx offset)
@@ -90,7 +85,7 @@
 (defun get-offset (mode)
   (case mode
     (1  (complex 0 0))
-    (otherwise (complex -50 450))))
+    (otherwise (shape-offset *curr-shape*))))
 
 (defun mirror-list (i maxnum)
   (cond ((zerop i) 0)
@@ -111,11 +106,12 @@
         (:else (- maxnum i))))
 
 (defun get-idx (i mode)
-  (case mode
-    (3 (elt *fft-idx-sorted* (mirror-list i *max-num*)))
-    (2 (elt *fft-idx-sorted* i))
-    (1 (mod (+ i *shift*) *fft-size*))
-    (otherwise (mirror-list2 i *max-num*))))
+  (with-slots (size fft-idx-sorted) *curr-shape*
+    (case mode
+      (3 (elt fft-idx-sorted (mirror-list i *max-num*)))
+      (2 (elt fft-idx-sorted i))
+      (1 (mod (+ i *shift*) size))
+      (otherwise (mirror-list2 i *max-num*)))))
 
 (defun main ()
   (sdl:with-init ()
@@ -131,23 +127,24 @@
          (setf *random-color* (sdl:color :r (random 255) :g (random 255) :b (random 255))))
        ;; Clear the display each game loop
        (sdl:clear-display sdl:*black*)
-       ;; Draw the eighth note outline
-;;       (draw-shape)
+       ;; Draw the shape outline
+       (draw-shape)
+       (paint)
        (let ((offset (get-offset *mode*)))
-         (dotimes (i *max-num*)
-           (let* ((x (get-idx i *mode*))
-                  (curr (* (aref *fft* x)
-                           (exp (* +i+ (funcall *freq-idx-transform* x) *angle*)))))
-             (unless (zerop x) (draw-circled-arrow curr offset))
-             (case *mode*
-               (1 (setf offset (complex (+ 50 (* (mod x 9) 100))
-                                        (+ 60 (* (mod (floor x 9) 9) 100)))))
-               (otherwise (incf offset curr)))))
+         (with-slots (fft scale freq-idx-transform-fn) *curr-shape*
+           (dotimes (i *max-num*)
+             (let* ((x (get-idx i *mode*))
+                    (curr (* (aref fft x) scale
+                             (exp (* +i+ (funcall freq-idx-transform-fn x) *angle*)))))
+               (unless (= x 0) (draw-circled-arrow curr offset))
+               (case *mode*
+                 (1 (setf offset (complex (+ 50 (* (mod x 9) 100))
+                                          (+ 60 (* (mod (floor x 9) 9) 100)))))
+                 (otherwise (incf offset curr))))))
          (incf *angle* *angle-increment*)
          (setf *curr-path-idx* (mod (1- *curr-path-idx*) *max-path-length*))
          (setf *path-size* (min (1+ *path-size*) *max-path-length*))
          (setf (aref *cyclic-path* *curr-path-idx*) (vector (round (realpart offset)) (round (imagpart offset)))))
-       (paint)
        ;; Redraw the display
        (sdl:update-display)))))
 
@@ -159,15 +156,12 @@
 (setf *max-num* 512)
 (set-speed 0.05)
 (setf *mode* 3)
+(set-shape *violinschluessel-512*)
+;; (set-shape *achtel-512*)
+;; (set-shape *hessen-512*)
+
+;;; Start app:
+;;;
 ;;; (main)
 
-
-
-#|
-(loop
-  for i below (- *path-size* 2)
-  collect (list (aref *cyclic-path* (mod (+ i *curr-path-idx*) *max-path-length*))
-                (aref *cyclic-path* (mod (+ i 1 *curr-path-idx*) 2048))))
-
-|#
 

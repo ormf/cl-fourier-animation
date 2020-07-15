@@ -72,7 +72,8 @@ two's complement for a range given by size.
 
 ;;; cyclic path for showing the current paint procedure with a fading line.
 
-
+(defun power-of-two? (num)
+  (zerop (logand num (- num 1))))
 
 ;;; (defun )
 

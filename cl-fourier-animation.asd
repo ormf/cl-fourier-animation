@@ -15,6 +15,6 @@
   :components ((:file "package")
                (:file "utils")
                (:file "path-convert")
-               (:file "data")
                (:file "fft-calculation")
+               (:file "data")
                (:file "cl-fourier-animation")))

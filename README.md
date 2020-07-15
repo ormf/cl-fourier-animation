@@ -20,10 +20,15 @@ Then start up emacs/slime and issue:
 
 `(cl-fourier-animation:main)`
 
-This is a first sketch. There are different display modes and other
-shapes can be added by extracting the points from an svg file (the
-parser and the fft analysis code is contained, although not thoroughly
-documented).
+On the bottom of cl-fourier-animation.lisp are a couple of commands
+commented out. You change between different shapes with `(set-shape
+*achtel-512*)`, `(set-shape *hessen-512*)` or `(set-shape
+*violinschluessel-512*)`. You can change the speed, and the maximum
+number of partials to be used and choose between differnet
+displaymodes of the rotating arrows.
+
+Other shapes can be added by extracting the points from an svg file
+(see file "data.lisp").
 
 The advantage of this code is that being interactive zooming and
 animations for different display modes could easily get implemented.
