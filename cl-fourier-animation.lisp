@@ -124,12 +124,10 @@
        (sdl:push-quit-event))
       (:idle ()
        ;; Change the color of the box if the left mouse button is depressed
-       (when (sdl:mouse-left-p)
-         (setf *random-color* (sdl:color :r (random 255) :g (random 255) :b (random 255))))
-       ;; Clear the display each game loop
+              ;; Clear the display each game loop
        (sdl:clear-display sdl:*black*)
        ;; Draw the shape outline
-       (draw-shape)
+;;       (draw-shape)
        (paint)
        (let ((offset (get-offset *mode*)))
          (with-slots (fft scale freq-idx-transform-fn) *curr-shape*
@@ -150,13 +148,12 @@
        (sdl:update-display)))))
 
 ;;; (setf *angle-increment* 0.01)
-
-;;; (setf *angle-increment* -0)
 ;;; (setf *angle* 0)
 
-(setf *max-num* 512)
-(set-speed 0.05)
+(set-speed 0.01)
 (setf *mode* 3)
+(setf *path-size* 0)
+(setf *max-num* 512)
 (set-shape *violinschluessel-512*)
 ;; (set-shape *achtel-512*)
 ;; (set-shape *hessen-512*)

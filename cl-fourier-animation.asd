@@ -11,7 +11,8 @@
 ;;;               #:cl-opengl
                :cl-ppcre
                :bordeaux-fft
-               :sb-cga)
+               :sb-cga
+               :magicl)
   :components ((:file "package")
                (:file "utils")
                (:file "path-convert")

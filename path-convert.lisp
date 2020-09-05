@@ -25,38 +25,61 @@
 (defun delimiterp (char)
   (member char '(#\V #\H #\M #\L #\C #\S #\Z #\v #\h #\m #\l #\c #\s #\z)))
 
-
 (defun my-split (string &key (delimiterp #'delimiterp))
-  (loop :for beg = (position-if-not delimiterp string)
-    :then (position-if-not delimiterp string :start (1+ end))
-    :for end = (and beg (position-if delimiterp string :start beg))
-        :when beg :collect (subseq string (1- beg) end)
-    :while end))
+  (loop for beg = (position-if-not delimiterp string)
+          then (position-if-not delimiterp string :start (1+ end))
+        for end = (and beg (position-if delimiterp string :start beg))
+        when beg collect (subseq string (1- beg) end)
+    while end))
 
 (defparameter *x* 0)
 (defparameter *y* 0)
+;;; (ql:quickload "magicl")
 
-;;; Path extraction functions:
+;;; (use-package :magicl)
+
+;;; Absolute path coords extraction functions:
 
 (defun moveto-rel (&rest coords)
+  "moveto is handled like lineto."
   (loop for (x y) on coords by #'cddr
-        collect `(,(incf *x* x) ,(incf *y* y))))
+        collect `((,*x* ,*y*) (,(incf *x* x) ,(incf *y* y)))))
 
 (defun lineto-rel (&rest coords)
   (loop for (x y) on coords by #'cddr
-        collect `(,(incf *x* x) ,(incf *y* y))))
+        collect `((,*x* ,*y*) (,(incf *x* x) ,(incf *y* y)))))
 
 (defun vertical-rel (&rest coords)
   (loop for y in coords
-        collect `(,*x* ,(incf *y* y))))
+        collect `((,*x* ,*y*) (,*x* ,(incf *y* y)))))
 
 (defun horizontal-rel (&rest coords)
   (loop for x in coords
-        collect `(,(incf *x* x) ,*y*)))
+        collect `((,*x* ,*y*) (,(incf *x* x) ,*y*))))
 
 (defun curveto-rel (&rest coords)
   (loop for (x1 y1 x2 y2 x y) on coords by (lambda (x) (nthcdr 6 x))
-        collect `(,(incf *x* x) ,(incf *y* y))))
+        collect `((,*x* ,*y*)
+                  (,(+ *x* x1) ,(+ *y* y1))
+                  (,(+ *x* x2) ,(+ *y* y2))
+                  (,(incf *x* x) ,(incf *y* y)))))
+
+(defun qcurveto-rel (&rest coords)
+  (loop for (x1 y1 x y) on coords by (lambda (x) (nthcdr 6 x))
+        collect `((,*x* ,*y*)
+                  (,(+ *x* x1) ,(+ *y* y1))
+                  (,(incf *x* x) ,(incf *y* y)))))
+
+;;; (decasteljau 1 '((2 3) (3 4) (1 5) (4 6)))
+
+(defun decasteljau (x points)
+  "algorithm of de Casteljau interpolating a bezier curve segment with
+given points. Returns the point on the curve between start (x=0) and
+end (x=1) of segment."
+  (flet ((ip (v1 v2) (+ (* v1 (- 1 x)) (* v2 x))))
+    (if (= (length points) 2) (mapcar (lambda (pt) (apply #'ip pt)) points)
+        (decasteljau x (loop for (pt1 pt2) on points while pt2
+                             collect (mapcar #'ip pt1 pt2))))))
 
 (defun smooth-curveto-rel (&rest coords)
   (loop for (x2 y2 x y) on coords by (lambda (x) (nthcdr 4 x))

@@ -65,8 +65,6 @@ two's complement for a range given by size.
          (max (ash 1 (1+ power-of-two))))
     (lambda (x) (if (> x split-point) (- x max) x))))
 
-
-
 (defun scale-rotate (path cx offset &key round)
   "rotate, scale and offset a path of 2D points. The path is a seq of
 complex numbers. The result is returned as a list."
