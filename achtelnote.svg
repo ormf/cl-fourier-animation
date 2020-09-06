@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="210mm"
+   height="297mm"
+   viewBox="0 0 210 297"
+   version="1.1"
+   id="svg8"
+   sodipodi:docname="achtelnote.svg"
+   inkscape:version="0.92.4 5da689c313, 2019-01-14">
+  <defs
+     id="defs2" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.9087798"
+     inkscape:cx="396.85039"
+     inkscape:cy="563.01079"
+     inkscape:document-units="mm"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1600"
+     inkscape:window-height="882"
+     inkscape:window-x="0"
+     inkscape:window-y="2"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Ebene 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       aria-label="e"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-size:25.39999962px;line-height:125%;font-family:Sonata;-inkscape-font-specification:Sonata;font-variant-ligatures:normal;font-variant-caps:normal;font-variant-numeric:normal;font-feature-settings:normal;text-align:start;letter-spacing:0px;word-spacing:0px;writing-mode:lr-tb;text-anchor:start;fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:0.26458332px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+       id="text19"
+       transform="translate(-1003.763,-1766.0938)" />
+    <a
+       transform="matrix(6.3796229,0,0,6.3796229,-1102.0431,-1740.3636)"
+       style="color:inherit;fill:none;stroke:#000000;stroke-width:0.03649641;stroke-miterlimit:4;stroke-dasharray:none"
+       xlink:href="textedit:///tmp/test.ly:3:2:3"
+       id="a323">
+      <path
+         style="fill:none;stroke:#000000;stroke-width:0.24240035;stroke-miterlimit:4;stroke-dasharray:none"
+         d="m 189.37695,280.98047 c -0.0736,0 -0.13999,0.0296 -0.188,0.0776 -0.048,0.048 -0.0776,0.11442 -0.0776,0.188 v 10.41046 10.41046 c -0.26874,-0.2013 -0.58484,-0.35071 -0.92668,-0.4498 -0.34184,-0.0991 -0.70943,-0.14785 -1.08113,-0.14785 -0.54463,0 -1.08219,0.0866 -1.59982,0.24293 -0.51763,0.15634 -1.01534,0.38241 -1.48026,0.66136 -0.62433,0.37194 -1.30206,0.88963 -1.82371,1.55012 -0.52166,0.66049 -0.88723,1.46378 -0.88723,2.40691 0,0.8103 0.35199,1.40161 0.88662,1.79034 0.53464,0.38874 1.25192,0.5749 1.98252,0.5749 0.54462,0 1.08267,-0.0861 1.60079,-0.24196 0.51812,-0.15585 1.01632,-0.38144 1.48124,-0.66039 0.62432,-0.37193 1.30157,-0.89012 1.82274,-1.55109 0.52116,-0.66098 0.88625,-1.46476 0.88625,-2.40789 0.002,-3.57165 0.003,-5.75365 0.003,-7.94522 -1.2e-4,-2.19157 -8.7e-4,-4.39272 -8.7e-4,-8.00265 0.94313,0.99626 2.03932,2.19204 2.89973,3.48081 0.86041,1.28877 1.48504,2.67052 1.48504,4.03872 0,0.87671 -0.10661,1.74646 -0.29957,2.59962 -0.19295,0.85315 -0.47225,1.68969 -0.81762,2.49999 0.009,0.36763 0.21071,0.59631 0.45207,0.66855 0.24135,0.0722 0.52245,-0.012 0.69051,-0.27011 0.34537,-0.87672 0.61783,-1.77966 0.80395,-2.69921 0.18611,-0.91956 0.28589,-1.85571 0.28589,-2.79884 0,-2.61685 -1.375,-4.84846 -2.75,-7.08008 -1.375,-2.23161 -2.75,-4.46323 -2.75,-7.08008 0,-0.0736 -0.0296,-0.13999 -0.0776,-0.188 -0.048,-0.048 -0.11442,-0.0776 -0.18801,-0.0776 l -0.16604,0 z"
+         id="path321"
+         inkscape:connector-curvature="0"
+         sodipodi:nodetypes="sssccssscssssscscscssscscsssssscs" />
+    </a>
+  </g>
+</svg>
