@@ -22,7 +22,6 @@
 
 (defparameter *random-color* sdl:*white*)
 
-
 (defparameter *mode* 0)
 (defparameter *angle* 0)
 (defparameter *frame-rate* 60)
@@ -150,7 +149,7 @@
 ;;; (setf *angle-increment* 0.01)
 ;;; (setf *angle* 0)
 
-(set-speed 0.01)
+(set-speed 0.04)
 (setf *mode* 3)
 (setf *path-size* 0)
 (setf *max-num* 512)

@@ -72,15 +72,6 @@
 
 ;;; (decasteljau 1 '((2 3) (3 4) (1 5) (4 6)))
 
-(defun decasteljau (x points)
-  "algorithm of de Casteljau interpolating a bezier curve segment with
-given points. Returns the point on the curve between start (x=0) and
-end (x=1) of segment."
-  (flet ((ip (v1 v2) (+ (* v1 (- 1 x)) (* v2 x))))
-    (if (= (length points) 2) (mapcar (lambda (pt) (apply #'ip pt)) points)
-        (decasteljau x (loop for (pt1 pt2) on points while pt2
-                             collect (mapcar #'ip pt1 pt2))))))
-
 (defun smooth-curveto-rel (&rest coords)
   (loop for (x2 y2 x y) on coords by (lambda (x) (nthcdr 4 x))
         collect `(,(incf *x* x) ,(incf *y* y))))
@@ -134,14 +125,68 @@ end (x=1) of segment."
                             (cdr (assoc (elt seq 0) *fn-assoc* :test #'string=))
                             (subseq seq 1 nil))))
 
-(defun get-coords (str)
+(defun get-segments (str)
   "transform an svg path by first splitting the path into subpaths for
 each opcode and then map over the subpaths by calling the functions
-defined in *fn-assoc* over their coords."
+defined in *fn-assoc* over their coords. The function returns sublists
+of two or more points being the coords of segments to be rasterized
+using de Casteljau's algorithm."
   (let ((*x* 0.0) (*y* 0.0)) ;;; init special variables used in the path extraction functions.
     (loop
       for path in (map 'list #'read-to-list (my-split (cl-ppcre:regex-replace-all "," str " ")))
       append (apply (symbol-function (first path)) (rest path)))))
+
+(defun decasteljau (x points)
+  "algorithm of de Casteljau interpolating a bezier curve segment with
+given points. Returns the point on the curve between start (x=0) and
+end (x=1) of segment."
+  (flet ((ip (v1 v2) (+ (* v1 (- 1 x)) (* v2 x))))
+    (if (= (length points) 2) (apply #'mapcar #'ip points)
+        (decasteljau x (loop for (pt1 pt2) on points while pt2
+                             collect (mapcar #'ip pt1 pt2))))))
+
+(defun rasterize (points &optional (num-points 1000))
+  "rasterize a path segment using de casteljau's algorithm."
+  (loop for i below num-points
+        collect (decasteljau (/ i num-points) points)))
+
+;;;(declaim (optimize (speed 3) (safety 0)))
+
+(defun vlen (x0 y0 x1 y1)
+  "length of line from (x0 y0) to (x1 y1)."
+  (declare (type single-float x0 y0 x1 y1))
+  (sqrt (+ (* (- x1 x0) (- x1 x0))
+           (* (- y1 y0) (- y1 y0)))))
+
+(defun get-lengths (coords)
+  "return the accumulated lengths between succesive coords."
+  (loop for ((x0 y0) (x1 y1)) on coords by #'cdr while x1
+        summing (vlen x0 y0 x1 y1) into res collect res))
+
+(defun get-rasterized-coords (path &optional (points-per-segment 1000))
+  "turn a svg path into coords. points-per-segment defines the number
+of coords of each path segment to return."
+  (apply #'append (mapcar (lambda (segment) (rasterize segment points-per-segment)) (rest (get-segments path)))))
+
+(defun get-coords (path num &optional (points-per-segment 100))
+  "return num coords approximately evenly spaced along the
+path. points-per-segment defines the number of points of each path
+segment which serve as the pool of candidates of points to be
+returned. Increase this number to optimize the approximation of the
+spacing of returned points."
+  (let* ((coords (get-rasterized-coords path points-per-segment))
+         (lengths (get-lengths coords))
+         (total-length (first (last lengths))))
+    (loop
+      for pt in coords
+      for curr-length in lengths
+      with length-inc = (/ total-length num)
+      with target-length = 0.0
+;;;      do (break "pt: ~a, curr-length: ~a, length-inc: ~a target-length: ~a~%" pt curr-length length-inc target-length)
+      if (> curr-length target-length)
+        collect (progn
+                  (incf target-length length-inc)
+                  pt))))
 
 (defun normalize-coords (coords)
   (let* ((vals (apply #'append coords))
@@ -151,3 +196,7 @@ defined in *fn-assoc* over their coords."
     (loop for pt in coords
           collect (destructuring-bind (x y) pt
                     (list (dround (funcall fn x) 4) (dround (funcall fn y) 4))))))
+#|
+Lisp Tutorial:
+
+|#
